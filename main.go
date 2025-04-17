@@ -19,7 +19,7 @@
 package main
 
 import (
-	"database/sql"
+	_ "database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -27,7 +27,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var DB *sql.DB
+// var DB *sql.DB
 
 func main() {
 
@@ -75,22 +75,22 @@ func postSignup(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Received: Username=%s, Password=%s , Email=%s", username, password, email)
 }
 
-func OpenDatabase() error {
-	var err error
-	DB, err = sql.Open("postgres", "user=postgres password=8976 dbname=FirstDemoDatabase sslmode=disable")
-	if err != nil {
-		return err
-	}
+// func OpenDatabase() error {
+// 	var err error
+// 	DB, err = sql.Open("postgres", "user=postgres password=8976 dbname=FirstDemoDatabase sslmode=disable")
+// 	if err != nil {
+// 		return err
+// 	}
 
-	if err != nil {
-		return err
-	}
+// 	if err != nil {
+// 		return err
+// 	}
 
-	// CreateTable()
-	return nil
+// 	// CreateTable()
+// 	return nil
 
-}
+// }
 
-func CloseDatabase() error {
-	return DB.Close()
-}
+// func CloseDatabase() error {
+// 	return DB.Close()
+// }
