@@ -23,7 +23,7 @@ func Initialize() {
 func CreateTable() {
 	create :=
 		`CREATE TABLE IF NOT EXISTS users(
-     userid int,
+     userid serial,
 	 email varchar(100),
 	 password varchar(100)
 	);`
@@ -34,12 +34,20 @@ func CreateTable() {
 	}
 
 	insert :=
-		`INSERT INTO users VALUES
-	(1, 'user1@example.com', 'password1'),
-	(2, 'user2@example.com', 'password2'),
-	(3, 'user3@example.com', 'password3'),
-	(4, 'user4@example.com', 'password4'),
-	(5, 'user5@example.com', 'password5');`
+		`INSERT INTO users(email,password) VALUES
+	('user1@example.com', 'password1'),
+	('user2@example.com', 'password2'),
+	('user3@example.com', 'password3'),
+	('user4@example.com', 'password4'),
+	('user5@example.com', 'password5');`
+
+	// insert :=
+	// 	`INSERT INTO users VALUES
+	// (1, 'user1@example.com', 'password1'),
+	// (2, 'user2@example.com', 'password2'),
+	// (3, 'user3@example.com', 'password3'),
+	// (4, 'user4@example.com', 'password4'),
+	// (5, 'user5@example.com', 'password5');`
 
 	_, err = DB.Exec(insert)
 	if err != nil {

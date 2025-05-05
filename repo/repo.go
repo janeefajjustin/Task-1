@@ -69,14 +69,14 @@ func Save(user models.User) error {
 	// 	return err
 	// }
 
-	result, err := stmt.Exec(user.Email, user.Password)
+	_, err = stmt.Exec(user.Email, user.Password)
 	if err != nil {
 		return errors.New("query can't be executed")
 	}
-	user.ID, err = result.LastInsertId()
-	//fmt.Println(user.ID)
-	if err != nil {
-		return err
-	}
+	// user.ID, err = result.LastInsertId()
+	// //fmt.Println(user.ID)
+	// if err != nil {
+	// 	return err
+	// }
 	return nil
 }
