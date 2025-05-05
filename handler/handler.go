@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -18,10 +17,10 @@ func Login(context *gin.Context) {
 		return
 	}
 	//testttt
-	fmt.Println(user)
-	fmt.Printf("user.Email %v \n", user.Email)
-	fmt.Printf("user.Password %v \n", user.Password)
-	fmt.Printf("user.ID %v \n", user.ID)
+	// fmt.Println(user)
+	// fmt.Printf("user.Email %v \n", user.Email)
+	// fmt.Printf("user.Password %v \n", user.Password)
+	// fmt.Printf("user.ID %v \n", user.ID)
 
 	err = repo.ValidateCredentials(&user)
 	//err = nil

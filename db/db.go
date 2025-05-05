@@ -24,7 +24,7 @@ func CreateTable() {
 	create :=
 		`CREATE TABLE IF NOT EXISTS users(
      userid serial,
-	 email varchar(100),
+	 email varchar(100) unique,
 	 password varchar(100)
 	);`
 
