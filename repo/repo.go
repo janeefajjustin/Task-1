@@ -1,26 +1,15 @@
 package repo
 
-// func ValidateCredentials(username string, password string) error {
-// 	query := "SELECT username, password FROM users WHERE username=$1"
-// 	row := db.DB.QueryRow(query, username)
+// type UserRepo struct {
+// 	db *sql.DB
+// }
 
-// 	var retrivedPassword, retrivedUsername string
-// 	err := row.Scan(&retrivedUsername, &retrivedPassword)
-
-// 	fmt.Printf("retrived username: %s", retrivedUsername)
-// 	fmt.Printf("retrived password: %s", retrivedPassword)
-// 	fmt.Printf(" username: %s", username)
-// 	if err != nil {
-// 		return errors.New("credentials invalid")
+// func NewUserRepo() UserRepo {
+// 	return UserRepo{
+// 		db: db.DB,
 // 	}
+// }
 
-// 	if retrivedUsername == username {
-// 		if retrivedPassword == password {
-// 			return nil
-// 		}
-// 	} else {
-// 		return errors.New("Invalid UserName")
-// 	}
-// 	return nil
-
+// type RepoInterface interface {
+// 	ValidateCredentials(u models.User) error
 // }

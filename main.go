@@ -6,17 +6,12 @@ import (
 	"github.com/janeefajjustin/task-1/routes"
 )
 
-func InitDB() {
-	db.Initialize()
-}
-
 func main() {
-
+	db.Initialize()
 	server := gin.Default()
 	//server.LoadHTMLGlob("templates/*")
 	routes.RegisterRoutes(server)
-	server.Run("localhost:8080")
-
+	server.Run("localhost:8081")
 	//   r.GET("/ping", func(c *gin.Context) {
 	//     c.JSON(http.StatusOK, gin.H{
 	//       "message": "pong",

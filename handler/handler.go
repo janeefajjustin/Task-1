@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -17,34 +17,38 @@ func Login(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse request data."})
 		return
 	}
+	//testttt
+	fmt.Println(user)
+	fmt.Printf("user.Email %v \n",user.Email)
+	fmt.Printf("user.Password %v \n",user.Password)
+	fmt.Printf("user.ID %v \n",user.ID)
 
-	err = user.ValidateCredentials()
-	err = nil
+
+	err = db.ValidateCredentials(&user)
+	//err = nil
 
 	if err != nil {
-		context.JSON(http.StatusUnauthorized, gin.H{"messege": "err.Error()"})
-
+		context.JSON(http.StatusUnauthorized, gin.H{"messege": err.Error()})
 		return
 	}
 
 	context.JSON(http.StatusOK, gin.H{"message": "Login Successfull!"})
 }
 
-func (u models.User) ValidateCredentials() error {
-	query := "SELECT id, password FROM users WHERE email=?"
-	row := db.DB.QueryRow(query, u.Email)
-
-	var retrivedPassword string
-	err := row.Scan(&u.ID, &retrivedPassword)
-
+func SignUp(context *gin.Context) {
+	var user models.User
+	err := context.ShouldBindJSON(&user)
 	if err != nil {
-		return errors.New("credentials invalid")
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse the request"})
+		return
 	}
 
-	if u.Password != retrivedPassword {
-		return errors.New("credentials invalid")
+	err = db.Save(user)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
 	}
 
-	return nil
+	context.JSON(http.StatusCreated, gin.H{"message": "User created !"})
 
 }

@@ -2,9 +2,11 @@ package db
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 
+	"github.com/janeefajjustin/task-1/models"
 	_ "github.com/lib/pq"
 )
 
@@ -12,6 +14,7 @@ var DB *sql.DB
 
 func Initialize() {
 	err := OpenDatabase()
+	fmt.Println("DB Initializing....")
 	if err != nil {
 		log.Printf("A new error %v", err)
 	}
@@ -35,7 +38,7 @@ func CreateTable() {
 	insert :=
 		`INSERT INTO users VALUES
 	(1, 'user1@example.com', 'password1'),
-	(2,'user2', 'user2@example.com', 'password2'),
+	(2, 'user2@example.com', 'password2'),
 	(3, 'user3@example.com', 'password3'),
 	(4, 'user4@example.com', 'password4'),
 	(5, 'user5@example.com', 'password5');`
@@ -70,27 +73,62 @@ func CloseDatabase() error {
 	return DB.Close()
 }
 
-// func ValidateCredentials(username string, password string) error {
-// 	query := "SELECT username, password FROM users WHERE username=$1"
-// 	row := DB.QueryRow(query, username)
+//Code from repo
 
-// 	var retrivedPassword, retrivedUsername string
-// 	err := row.Scan(&retrivedUsername, &retrivedPassword)
+func ValidateCredentials(u *models.User) error {
+	query := "SELECT userid, password FROM users WHERE email=$1"
 
-// 	fmt.Printf("retrived username: %s", retrivedUsername)
-// 	fmt.Printf("retrived password: %s", retrivedPassword)
-// 	fmt.Printf(" username: %s", username)
-// 	if err != nil {
-// 		return errors.New("credentials invalid")
-// 	}
 
-// 	if retrivedUsername == username {
-// 		if retrivedPassword == password {
-// 			return nil
-// 		}
-// 	} else {
-// 		return errors.New("Invalid UserName")
-// 	}
-// 	return nil
+	//test
+	fmt.Printf("u.Email %v",u.Email)
+	fmt.Printf("u.Password %v",u.Password)
+	fmt.Printf("u.ID %vb\n",u.ID)
 
-// }
+	//add db
+	row := DB.QueryRow(query, u.Email)
+
+	var retrivedPassword string
+	err := row.Scan(&u.ID, &retrivedPassword)
+
+	
+	//test
+	fmt.Printf(" after : u.Email %v",u.Email)
+	fmt.Printf(" retrived Password %v",retrivedPassword)
+	fmt.Printf("u.ID %v",u.ID)
+
+	if err != nil {
+		return errors.New("user not found")
+	}
+
+	if u.Password != retrivedPassword {
+		return errors.New("password invalid")
+	}
+
+	return nil
+
+}
+
+func Save(user models.User) error {
+	query := "INSERT INTO users(email,password) VALUES (?,?)"
+	//add db
+	stmt, err := DB.Prepare(query)
+	if err != nil {
+		return errors.New("query can't be prepared")
+	}
+	defer stmt.Close()
+	// hashedpass, err := utils.HashedPassword(user.Password)
+	// result, err := stmt.Exec(user.Email, hashedpass)
+	// if err != nil {
+	// 	return err
+	// }
+
+	_, err = stmt.Exec(user.Email, user.Password)
+	if err != nil {
+		return errors.New("query can't be executed")
+	}
+	// user.ID, err = result.LastInsertId()
+	// if err != nil {
+	// 	return err
+	// }
+	return nil
+}

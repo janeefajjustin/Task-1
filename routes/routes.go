@@ -13,6 +13,6 @@ func RegisterRoutes(server *gin.Engine) {
 
 	//server.LoadHTMLFiles("templates/login.html")
 	server.POST("/user/login", handler.Login)
-	//server.POST("/signup", SignUp)
+    server.POST("/user/signup", handler.SignUp)
 
 }
