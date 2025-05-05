@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/janeefajjustin/task-1/db"
 	"github.com/janeefajjustin/task-1/models"
+	"github.com/janeefajjustin/task-1/repo"
 )
 
 func Login(context *gin.Context) {
@@ -19,12 +19,11 @@ func Login(context *gin.Context) {
 	}
 	//testttt
 	fmt.Println(user)
-	fmt.Printf("user.Email %v \n",user.Email)
-	fmt.Printf("user.Password %v \n",user.Password)
-	fmt.Printf("user.ID %v \n",user.ID)
+	fmt.Printf("user.Email %v \n", user.Email)
+	fmt.Printf("user.Password %v \n", user.Password)
+	fmt.Printf("user.ID %v \n", user.ID)
 
-
-	err = db.ValidateCredentials(&user)
+	err = repo.ValidateCredentials(&user)
 	//err = nil
 
 	if err != nil {
@@ -43,7 +42,7 @@ func SignUp(context *gin.Context) {
 		return
 	}
 
-	err = db.Save(user)
+	err = repo.Save(user)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
