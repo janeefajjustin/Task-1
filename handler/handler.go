@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/janeefajjustin/task-1/models"
 	"github.com/janeefajjustin/task-1/repo"
+	"github.com/janeefajjustin/task-1/service"
 )
 
 func Login(context *gin.Context) {
@@ -22,7 +23,7 @@ func Login(context *gin.Context) {
 	// fmt.Printf("user.Password %v \n", user.Password)
 	// fmt.Printf("user.ID %v \n", user.ID)
 
-	err = repo.ValidateCredentials(&user)
+	err = service.CompareUsernameandPassword(&user)
 	//err = nil
 
 	if err != nil {

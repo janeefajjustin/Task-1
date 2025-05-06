@@ -24,7 +24,7 @@ import (
 
 //Code from repo
 
-func ValidateCredentials(u *models.User) error {
+func ValidateCredentials(u *models.User) (string,error) {
 	query := "SELECT userid, password FROM users WHERE email=$1"
 
 	//test
@@ -43,14 +43,14 @@ func ValidateCredentials(u *models.User) error {
 	// fmt.Printf("u.ID %v", u.ID)
 
 	if err != nil {
-		return errors.New("user not found")
+		return "",errors.New("user not found")
 	}
 
-	if utils.CheckPasswordHash(retrivedPassword, u.Password) != true {
-		return errors.New("password invalid")
-	}
+	// if utils.CheckPasswordHash(retrivedPassword, u.Password) != true {
+	// 	return "",errors.New("password invalid")
+	// }
 
-	return nil
+	return  retrivedPassword,nil
 
 }
 
