@@ -24,7 +24,7 @@ import (
 
 //Code from repo
 
-func ValidateCredentials(u *models.User) (string,error) {
+func ValidateCredentials(u *models.User) (string, error) {
 	query := "SELECT userid, password FROM users WHERE email=$1"
 
 	//test
@@ -43,20 +43,21 @@ func ValidateCredentials(u *models.User) (string,error) {
 	// fmt.Printf("u.ID %v", u.ID)
 
 	if err != nil {
-		return "",errors.New("user not found")
+		return "", errors.New("user not found")
 	}
 
 	// if utils.CheckPasswordHash(retrivedPassword, u.Password) != true {
 	// 	return "",errors.New("password invalid")
 	// }
 
-	return  retrivedPassword,nil
+	return retrivedPassword, nil
 
 }
 
 func Save(user models.User) error {
 	query := "INSERT INTO users(email,password) VALUES ($1,$2)"
-	//add db
+
+	//var LastInsertId int64
 	stmt, err := db.DB.Prepare(query)
 	if err != nil {
 		return errors.New("query can't be prepared")
@@ -68,14 +69,38 @@ func Save(user models.User) error {
 		return errors.New("query can't be executed")
 	}
 
-	// _, err = stmt.Exec(user.Email, user.Password)
-	// if err != nil {
-	// 	return errors.New("query can't be executed")
-	// }
 	// user.ID, err = result.LastInsertId()
-	// //fmt.Println(user.ID)
+	// fmt.Println(user.ID)
+
 	// if err != nil {
 	// 	return err
 	// }
 	return nil
 }
+
+// func Save(user models.User) error {
+// 	query := "INSERT INTO users(email,password) VALUES ($1,$2)"
+
+// 	//var LastInsertId int64
+// 	stmt, err := db.DB.Prepare(query)
+// 	if err != nil {
+// 		return errors.New("query can't be prepared")
+// 	}
+// 	defer stmt.Close()
+// 	hashedpass, err := utils.HashedPassword(user.Password)
+// 	_, err = stmt.Exec(user.Email, hashedpass)
+// 	if err != nil {
+// 		return errors.New("query can't be executed")
+// 	}
+
+// 	// _, err = stmt.Exec(user.Email, user.Password)
+// 	// if err != nil {
+// 	// 	return errors.New("query can't be executed")
+// 	// }
+// 	// user.ID, err = result.LastInsertId()
+// 	// //fmt.Println(user.ID)
+// 	// if err != nil {
+// 	// 	return err
+// 	// }
+// 	return nil
+// }

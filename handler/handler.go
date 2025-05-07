@@ -7,6 +7,7 @@ import (
 	"github.com/janeefajjustin/task-1/models"
 	"github.com/janeefajjustin/task-1/repo"
 	"github.com/janeefajjustin/task-1/service"
+	"github.com/janeefajjustin/task-1/utils"
 )
 
 func Login(context *gin.Context) {
@@ -31,7 +32,12 @@ func Login(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"message": "Login Successfull!"})
+	token, err := utils.GenerateToken(user.Email, user.ID)
+	if err != nil {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "could not create token"})
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "Login Successfull!", "token": token})
 }
 
 func SignUp(context *gin.Context) {
