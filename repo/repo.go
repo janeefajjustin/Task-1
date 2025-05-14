@@ -78,6 +78,22 @@ func Save(user models.User) error {
 	return nil
 }
 
+func GetUserDetails(id int64) (models.User, error) {
+	query := "SELECT email FROM users WHERE userid=$1"
+
+	row := db.DB.QueryRow(query, id)
+
+	var user models.User
+	err := row.Scan(&user.Email)
+
+	user.ID = id
+
+	if err != nil {
+		return models.User{}, errors.New("user not found")
+	}
+	return user, nil
+}
+
 // func Save(user models.User) error {
 // 	query := "INSERT INTO users(email,password) VALUES ($1,$2)"
 

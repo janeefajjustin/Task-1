@@ -9,7 +9,8 @@ import (
 func main() {
 	db.Initialize()
 	server := gin.Default()
-	//server.LoadHTMLGlob("templates/*")
+	//to load all the html pages
+	server.LoadHTMLGlob("templates/*")
 	routes.RegisterRoutes(server)
 	server.Run("localhost:8081")
 	//   r.GET("/ping", func(c *gin.Context) {
