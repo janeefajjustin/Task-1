@@ -11,6 +11,23 @@ import (
 	"github.com/janeefajjustin/task-1/utils"
 )
 
+type UserHandler struct {
+	UserService *service.UserService
+}
+
+// type HandlerInterface interface {
+// 	UserDetails(context *gin.Context)
+// 	LoginPage(context *gin.Context)
+// 	SignUp(context *gin.Context)
+// 	Logout(context *gin.Context)
+// }
+
+func NewHandlerService(userService *service.UserService) UserHandler {
+	return UserHandler{
+		UserService: userService,
+	}
+}
+
 func UserDetails(context *gin.Context) {
 	id, err := strconv.ParseInt(context.Param("id"), 10, 64)
 
@@ -32,7 +49,7 @@ func LoginPage(context *gin.Context) {
 	//Login(context)
 }
 
-func Login(context *gin.Context) {
+func(h *UserHandler) Login(context *gin.Context) {
 
 	contentType := context.GetHeader("Content-Type")
 	var user models.User
@@ -58,7 +75,8 @@ func Login(context *gin.Context) {
 	// 	return
 	// }
 
-	err := service.CompareUsernameandPassword(&user)
+	// err := s.CompareUsernameandPassword(&user)
+	err := h.UserService.CompareUsernameandPassword(&user)
 
 	if err != nil {
 		context.JSON(http.StatusUnauthorized, gin.H{"messege": err.Error()})

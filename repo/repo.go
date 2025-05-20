@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"database/sql"
 	"errors"
 
 	"github.com/janeefajjustin/task-1/db"
@@ -8,39 +9,31 @@ import (
 	"github.com/janeefajjustin/task-1/utils"
 )
 
-// type UserRepo struct {
-// 	db *sql.DB
-// }
+type UserRepo struct {
+	Db *sql.DB
+}
 
-// func NewUserRepo() UserRepo {
-// 	return UserRepo{
-// 		db: db.DB,
-// 	}
-// }
+type RepoInterface interface {
+	ValidateCredentials(u *models.User) error
+}
 
-// type RepoInterface interface {
-// 	ValidateCredentials(u models.User) error
-// }
+func NewUserRepo(db *sql.DB) UserRepo {
+	return UserRepo{
+		Db: db,
+	}
+}
 
-//Code from repo
-
-func ValidateCredentials(u *models.User) (string, error) {
+func(r UserRepo) ValidateCredentials(u *models.User) (string, error) {
 	query := "SELECT userid, password FROM users WHERE email=$1"
 
-	//test
-	// fmt.Printf("u.Email %v", u.Email)
-	// fmt.Printf("u.Password %v", u.Password)
-	// fmt.Printf("u.ID %vb\n", u.ID)
 
-	row := db.DB.QueryRow(query, u.Email)
+
+	row := r.Db.QueryRow(query, u.Email)
 
 	var retrivedPassword string
 	err := row.Scan(&u.ID, &retrivedPassword)
 
-	//test
-	// fmt.Printf(" after : u.Email %v", u.Email)
-	// fmt.Printf(" retrived Password %v", retrivedPassword)
-	// fmt.Printf("u.ID %v", u.ID)
+	
 
 	if err != nil {
 		return "", errors.New("user not found")

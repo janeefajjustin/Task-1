@@ -8,8 +8,24 @@ import (
 	"github.com/janeefajjustin/task-1/utils"
 )
 
-func CompareUsernameandPassword(u *models.User) error {
-	retrivedPassword, err := repo.ValidateCredentials(u)
+type UserService struct {
+	UserRepo *repo.UserRepo
+}
+
+type ServiceInterface interface {
+	CompareUsernameandPassword(u *models.User) error
+}
+
+func NewUserService(userRepo *repo.UserRepo) UserService {
+	return UserService{
+		UserRepo: userRepo,
+	}
+}
+
+func(s *UserService) CompareUsernameandPassword(u *models.User) error {
+	// retrivedPassword, err := repo.ValidateCredentials(u)
+	retrivedPassword, err := s.UserRepo.ValidateCredentials(u)
+
 	if err != nil {
 		return err
 	}

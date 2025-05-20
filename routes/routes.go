@@ -9,11 +9,14 @@ import (
 
 func RegisterRoutes(server *gin.Engine) {
 
+	 h:=handler.UserHandler{}
+	 
+
 	// http.HandleFunc("/", Login)
 	// http.HandleFunc("/signup", Signup)
 
 	//server.LoadHTMLFiles("templates/login.html")
-	server.POST("/user/login", handler.Login)
+	server.POST("/user/login", h.Login)
 	server.GET("/", handler.LoginPage)
 	server.POST("/user/signup", handler.SignUp)
 	server.POST("/user/logout", handler.Logout)
