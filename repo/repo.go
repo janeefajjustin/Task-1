@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/janeefajjustin/task-1/db"
 	"github.com/janeefajjustin/task-1/models"
 	"github.com/janeefajjustin/task-1/utils"
 )
@@ -14,26 +13,24 @@ type UserRepo struct {
 }
 
 type RepoInterface interface {
-	ValidateCredentials(u *models.User) error
+	ValidateCredentials(u *models.User) (string, error)
+	Save(user models.User) error
+	GetUserDetails(id int64) (models.User, error)
 }
 
-func NewUserRepo(db *sql.DB) UserRepo {
-	return UserRepo{
-		Db: db,
-	}
-}
+// func NewUserRepo(db *sql.DB) UserRepo {
+// 	return UserRepo{
+// 		Db: db,
+// 	}
+// }
 
-func(r UserRepo) ValidateCredentials(u *models.User) (string, error) {
+func (r UserRepo) ValidateCredentials(u *models.User) (string, error) {
 	query := "SELECT userid, password FROM users WHERE email=$1"
-
-
 
 	row := r.Db.QueryRow(query, u.Email)
 
 	var retrivedPassword string
 	err := row.Scan(&u.ID, &retrivedPassword)
-
-	
 
 	if err != nil {
 		return "", errors.New("user not found")
@@ -47,11 +44,11 @@ func(r UserRepo) ValidateCredentials(u *models.User) (string, error) {
 
 }
 
-func Save(user models.User) error {
+func (r UserRepo) Save(user models.User) error {
 	query := "INSERT INTO users(email,password) VALUES ($1,$2)"
 
 	//var LastInsertId int64
-	stmt, err := db.DB.Prepare(query)
+	stmt, err := r.Db.Prepare(query)
 	if err != nil {
 		return errors.New("query can't be prepared")
 	}
@@ -71,10 +68,10 @@ func Save(user models.User) error {
 	return nil
 }
 
-func GetUserDetails(id int64) (models.User, error) {
+func (r UserRepo) GetUserDetails(id int64) (models.User, error) {
 	query := "SELECT email FROM users WHERE userid=$1"
 
-	row := db.DB.QueryRow(query, id)
+	row := r.Db.QueryRow(query, id)
 
 	var user models.User
 	err := row.Scan(&user.Email)

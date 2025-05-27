@@ -9,22 +9,23 @@ import (
 )
 
 type UserService struct {
-	UserRepo *repo.UserRepo
+	//UserRepo *repo.UserRepo
 }
 
 type ServiceInterface interface {
 	CompareUsernameandPassword(u *models.User) error
 }
 
-func NewUserService(userRepo *repo.UserRepo) UserService {
-	return UserService{
-		UserRepo: userRepo,
-	}
-}
+// func NewUserService(userRepo *repo.UserRepo) UserService {
+// 	return UserService{
+// 		UserRepo: userRepo,
+// 	}
+// }
 
-func(s *UserService) CompareUsernameandPassword(u *models.User) error {
+func (s UserService) CompareUsernameandPassword(u *models.User) error {
 	// retrivedPassword, err := repo.ValidateCredentials(u)
-	retrivedPassword, err := s.UserRepo.ValidateCredentials(u)
+	r := repo.RepoInterface(&repo.UserRepo{})
+	retrivedPassword, err := r.ValidateCredentials(u)
 
 	if err != nil {
 		return err

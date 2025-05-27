@@ -3,9 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/janeefajjustin/task-1/db"
-	"github.com/janeefajjustin/task-1/repo"
 	"github.com/janeefajjustin/task-1/routes"
-	"github.com/janeefajjustin/task-1/service"
 )
 
 func main() {
@@ -14,10 +12,6 @@ func main() {
 	//to load all the html pages
 	server.LoadHTMLGlob("templates/*")
 	routes.RegisterRoutes(server)
-
-	db := db.DB
-	userRepo := repo.NewUserRepo(db)
-	_ = service.NewUserService(&userRepo)
 
 	server.Run("localhost:8081")
 	//   r.GET("/ping", func(c *gin.Context) {

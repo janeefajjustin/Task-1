@@ -12,7 +12,7 @@ import (
 )
 
 type UserHandler struct {
-	UserService *service.UserService
+	// UserService *service.UserService
 }
 
 // type HandlerInterface interface {
@@ -22,11 +22,11 @@ type UserHandler struct {
 // 	Logout(context *gin.Context)
 // }
 
-func NewHandlerService(userService *service.UserService) UserHandler {
-	return UserHandler{
-		UserService: userService,
-	}
-}
+// func NewHandlerService(userService *service.UserService) UserHandler {
+// 	return UserHandler{
+// 		UserService: userService,
+// 	}
+// }
 
 func UserDetails(context *gin.Context) {
 	id, err := strconv.ParseInt(context.Param("id"), 10, 64)
